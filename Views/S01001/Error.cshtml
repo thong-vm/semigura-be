@@ -1,0 +1,15 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = @Localizer["error_page"];
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+<div>
+    <button type="submit" class="btn btn-primary" onclick="location.href='@Url.Action("Index", "S01002")'">
+        <span class="icon">
+            <i class="bi bi-arrow-left-circle-fill"></i>
+        </span>
+        <span class="text">ホームへ戻る</span>
+    </button>
+    <h2>@Localizer["C01003"]</h2>
+</div>

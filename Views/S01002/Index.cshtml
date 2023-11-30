@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model semigura.Models.S01002ViewModel
+@{
+    ViewBag.Title = Localizer["M_S01002"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", semigura.Commons.Utils.GetMinifiedFileName("S01002.css")))" rel="stylesheet" type="text/css">
+
+<!-- Page Heading -->
+
+<div class="row d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-900" style="margin: 5px;"><i class="bi bi-display" style="margin-right: 5px;"></i>@Localizer["M_S01002"]</h1>
+</div>
+
+<div class="container">
+    <div class="row header col-lg-6 col-md-12">
+        <h6 class="select_title">
+            @Localizer["factory"] :
+        </h6>
+        <div class="wapper-input">
+            @Html.DropDownListFor(
+                model => model.FactoryId,
+                new SelectList(Model.FactoryList, "Id", "Name"),
+                "",
+                new { @class = "select-classic form-control", @onchange = "LoadData()" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row ">
+        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12 col-lg-12 left">
+            <div class="row justify-content-center">
+                <label class="process_label">
+                    @Localizer["PROCESS_1"]
+                </label>
+            </div>
+            <div id="moromi-content">
+            </div>
+        </div>
+        <div class="col-xl-6 col-md-12 col-sm-12 col-xs-12 col-lg-12 right">
+            <div class="row justify-content-center">
+                <label class="process_label">
+                    @Localizer["PROCESS_2"]
+                </label>
+            </div>
+            <div id="seigiku-content">
+            </div>
+        </div>
+    </div>
+</div>
+
+<input id="location_label" type="hidden" value="@Localizer["LOCATION"]" />
+<input id="table_th-1" type="hidden" value="@Localizer["TH_1"]" />
+<input id="table_th-2" type="hidden" value="@Localizer["TH_2"]" />
+<input id="table_th-3" type="hidden" value="@Localizer["TH_3"]" />
+<input id="cookies_FactoryId" type="hidden" value="@semigura.Commons.Properties.COOKIES_S01002_FACTORYID" />
+<input id="image_url" type="hidden" value="@Url.Action("GetImageFromNAS", "S01001")" />
+
+
+@*<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", semigura.Commons.Utils.GetMinifiedFileName("S01002.js")))" type="text/javascript"></script>*@
+<script src="~/lib/signalr/dist/browser/signalr.js"></script>
+<script src="~/Content/dev/js/S01002.js"></script>

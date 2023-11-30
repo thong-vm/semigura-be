@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="alert" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="all" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="C01001" xml:space="preserve">
+    <value>{0} is required.</value>
+  </data>
+  <data name="C01002" xml:space="preserve">
+    <value>The length of {0} exceeds the upper limit.</value>
+  </data>
+  <data name="C01003" xml:space="preserve">
+    <value>An error has occurred. Contact your system administrator.</value>
+  </data>
+  <data name="C01004" xml:space="preserve">
+    <value>Item does not exist.</value>
+  </data>
+  <data name="C01005" xml:space="preserve">
+    <value>{0} is required.</value>
+  </data>
+  <data name="C01006" xml:space="preserve">
+    <value>The device is not registered in the system.(Device code：{0})</value>
+  </data>
+  <data name="C01007" xml:space="preserve">
+    <value>The terminal is not connected to the server, so it cannot be streamed.</value>
+  </data>
+  <data name="C01008" xml:space="preserve">
+    <value>This request is rejected because another device with the same ID is connecting to the server.</value>
+  </data>
+  <data name="C01009" xml:space="preserve">
+    <value>Maximum message size: {0} bytes.</value>
+  </data>
+  <data name="connecting" xml:space="preserve">
+    <value>Connecting...</value>
+  </data>
+  <data name="dialog_alert_closebtn" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="dialog_alert_title" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="dialog_confirm_closebtn" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="dialog_confirm_logout" xml:space="preserve">
+    <value>Do you want to logout?</value>
+  </data>
+  <data name="dialog_confirm_okbtn" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="dialog_confirm_title" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="empty_table" xml:space="preserve">
+    <value>No data available in table</value>
+  </data>
+  <data name="error_page" xml:space="preserve">
+    <value>Error page !</value>
+  </data>
+  <data name="format" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="lengthCheck" xml:space="preserve">
+    <value>Do not enter more than {1} characters</value>
+  </data>
+  <data name="logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="M_ADMINISTRATOR" xml:space="preserve">
+    <value>ADMIN</value>
+  </data>
+  <data name="M_MAIN" xml:space="preserve">
+    <value>MAIN</value>
+  </data>
+  <data name="M_S01001" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="M_S01002" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="M_S02000" xml:space="preserve">
+    <value>Engineering</value>
+  </data>
+  <data name="M_S02001" xml:space="preserve">
+    <value>Moromi monitor</value>
+  </data>
+  <data name="M_S02002" xml:space="preserve">
+    <value>Koji monitor</value>
+  </data>
+  <data name="M_S02003" xml:space="preserve">
+    <value>Room</value>
+  </data>
+  <data name="M_S03000" xml:space="preserve">
+    <value>Common</value>
+  </data>
+  <data name="M_S03001" xml:space="preserve">
+    <value>Lot</value>
+  </data>
+  <data name="M_S03002" xml:space="preserve">
+    <value>Tank</value>
+  </data>
+  <data name="M_S03003" xml:space="preserve">
+    <value>Koji</value>
+  </data>
+  <data name="M_S03004" xml:space="preserve">
+    <value>Report</value>
+  </data>
+  <data name="M_S03005" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="M_S03006" xml:space="preserve">
+    <value>oke chou</value>
+  </data>
+  <data name="M_S09000" xml:space="preserve">
+    <value>Setting</value>
+  </data>
+  <data name="M_S09001" xml:space="preserve">
+    <value>Material Master</value>
+  </data>
+  <data name="M_S09002" xml:space="preserve">
+    <value>Alert email</value>
+  </data>
+  <data name="M_S09003" xml:space="preserve">
+    <value>Tanks Master</value>
+  </data>
+  <data name="M_S09004" xml:space="preserve">
+    <value>Sensor Master</value>
+  </data>
+  <data name="notification" xml:space="preserve">
+    <value>Alert !</value>
+  </data>
+  <data name="rankCheck" xml:space="preserve">
+    <value>{0} must be greater than {1} and less than {2}.</value>
+  </data>
+  <data name="save_completed" xml:space="preserve">
+    <value>Saving completed successfully.</value>
+  </data>
+  <data name="spinner_loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="system_name" xml:space="preserve">
+    <value>Sake brewing management</value>
+  </data>
+  <data name="unauthorized" xml:space="preserve">
+    <value>UnAuthorized !</value>
+  </data>
+</root>

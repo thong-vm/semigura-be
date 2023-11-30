@@ -1,0 +1,53 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using semigura.Commons;
+@model semigura.Models.S03006ViewModel
+@{
+    ViewBag.Title = Localizer["M_S03006"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S03006.css")))" rel="stylesheet" type="text/css">
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-display" style="margin-right: 3.5px;"></i>@Localizer["M_S03006"]</h1>
+</div>
+
+
+
+<div class="">
+    <div class="col-md-12 col-sm-12">
+        <div class="form-group">
+            <label class="form_label" style="width: auto; border: 5px; max-width: 95px;">@Localizer["tankcode"]：</label>
+            @*<label id="TankCode" class="form_label" style="width:auto">T25</label>*@
+            <div class="wapper-input" id="TankCode" style="width: 500px">
+                @Html.DropDownListFor(
+                            model => model.ContainerId,
+                            new SelectList(Model.ListContainer, "Id", "Code"),
+                            "",
+                            new { @class = "select-classic form-control", @onchange = "LoadDataContainer()" })
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-12 col-sm-12"style="margin-top: 100px;">
+        <div class="form-group">
+            <div id="inp-depth" class="input-group" style="width: 140%;">
+                <input id="depthTank" type="text" class="form-control" placeholder="0" style="text-align:right" aria-describedby="basic-addon4" onkeyup="DepthToCapacity(this)">
+                <span class="input-group-text" id="basic-addon4" title="@Localizer["height"]">(mm)</span>
+            </div>
+            
+            <button type="button" class="btn btn-primary btn-sub" onclick="SwapElement()" style="height: 50px; width: 100%; margin-left: 100px; margin-right: 100px; ">
+                
+                <i class="bi bi-arrow-left-right"></i>
+
+            </button>
+                <div id="inp-capacity" class="input-group" style="width: 140%;">
+                    <input id="volumeTank" type="text" class="form-control" placeholder="0" style="text-align:right" aria-describedby="basic-addon5" onkeyup="CapacityToDepth(this)">
+                <span class="input-group-text" id="basic-addon5" 　title="@Localizer["capacity"]">(ℓ)</span>
+                </div>
+            </div>
+        </div>
+</div>
+
+<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("S03006.js")))" type="text/javascript"></script>

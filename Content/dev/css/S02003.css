@@ -1,0 +1,225 @@
+﻿.home_header {
+    padding-top: 10px;
+    padding-left: 10px;
+}
+
+.container {
+    min-width: 90%;
+    max-width: 100%;
+    padding: 10px 20px 0px 20px;
+    color: black;
+}
+
+.head {
+    width: 100%;
+    display: flex;
+    margin-left: 2%;
+    margin-bottom: 10px;
+}
+
+.wapper-input {
+    width: 60%;
+}
+
+.select_block {
+    display: inherit;
+    margin-block: 5px;
+}
+
+
+.select_title {
+    margin: auto 0px;
+    font-size: 1rem;
+}
+
+.select_content {
+    margin-left: 20px;
+    width: 8rem;
+    border-radius: 5px;
+    border: thin solid #d1d3e2;
+}
+.select-classic{
+    margin-left: 10px !important;
+    width: 60% !important;
+}
+
+
+select:hover {
+    cursor: pointer;
+}
+
+.header_under {
+    border-bottom: 1px dashed gray;
+    border-top: none;
+}
+
+.process_content {
+    display: flex;
+    justify-content: space-around;
+}
+.room_No {
+    position: absolute;
+    left:30%;
+    color: blue;
+    font-weight:bold;
+}
+.sum_content{
+    display: flex;
+    justify-content:center;
+    margin: 10px;
+}
+.room_content{
+    margin-block: 10px;
+}
+
+.content {
+    border: 1px solid black;
+    margin: 10px auto;
+    padding: 0px;
+    width: 160px;
+    height: 70px;
+    border-radius: 10px;
+    box-shadow: 10px 5px 5px #ebebeb;
+}
+
+.content_title {
+    max-width: fit-content;
+    min-width: 40%;
+    font-weight: bold;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    padding-left: 0.3em;
+    height: 29%;
+    background-color: var(--orange);
+    color: white;
+    border-radius: 10px 0px 10px 0px;
+    padding-right: 5px;
+}
+
+.content_desc {
+    width: 30%;
+    font-weight: bold;
+    font-size: 20px;
+    position: relative;
+    top: 0.8rem;
+    left: 1.8rem;
+}
+
+.content_icon {
+    position: relative;
+    top: -3.2rem;
+    left: 6rem;
+}
+
+    .content_icon img {
+        width: 40px;
+        height: 40px;
+    }
+
+.chart_display {
+    margin: 2%;
+    height: 50vh;
+    width: 100%;
+}
+
+.content_block {
+    margin: 5px 25px 0px 20px;
+}
+
+/* CSS for Search Button */
+.searchBlock {
+    /*float: right;*/
+    margin: 10px 10px 20px 20px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    height: fit-content;
+}
+
+.search_date {
+    width: 30%;
+    border: thin solid #d1d3e2;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.search_button {
+    margin-left: 5px;
+}
+.chart_content {
+    width: 90%;
+}
+
+@media (max-width: 920px) {
+    .wapper-input{
+        width: 60%;
+    }
+/*    .select-classic {
+        width: 70% !important;
+    }*/
+    .select_title {
+        font-size: 0.8rem;
+    }
+    .sum_content {
+        margin: auto;
+        margin-top: 10px;
+    }
+    .content {
+        width: 110px;
+        height: 55px;
+    }
+
+    .content_title {
+        max-width: fit-content;
+        height: 30%;
+        font-size:12px;
+    }
+
+    .content_desc {
+        width: 30%;
+        position: relative;
+        font-size: 15px;
+        top: 0.6rem;
+        left: 1.2rem;
+    }
+
+    .content_icon {
+        position: relative;
+        top: -2.5rem;
+        left: 4.5rem;
+    }
+
+        .content_icon img {
+            width: 30px;
+            height: 30px;
+        }
+    .select_block {
+        display: flex;
+        justify-content: space-around;
+    }
+    .chart_content {
+        font-size: 12px;
+    }
+    .chart_display {
+        margin: 10px 10px 60px 10px;
+        height: 40vh;
+    }
+    .btn {
+        font-size: 12px !important;
+    }
+    .content_block {
+        margin: 5px 10px 0px 10px;
+    }
+    .select-classic {
+        margin-left: 10px !important;
+        width: 80% !important;
+    }
+    .select_title {
+        width: 35%;
+    }
+
+    .col-md-6 {
+        margin-bottom: 15px;
+    }
+
+}

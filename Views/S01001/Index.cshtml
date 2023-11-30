@@ -1,0 +1,98 @@
+﻿@using semigura.Commons;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+
+@model semigura.Models.S01001ViewModel
+@{
+    ViewBag.Title = Localizer["M_S01001"];
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S01001.css")))" rel="stylesheet" type="text/css">
+
+
+<input id="is_login_page" type="hidden" />
+<div class="login-form">
+    @using (Html.BeginForm("Login", "S01001", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            <div class="col-xl-12 col-lg-12 col-md-12">
+                <div class="o-hidden border-0 shadow-lg my-5">
+                    <div class="card-body p-0">
+                        <div class="row">
+                            <div class="col-lg-8 d-none d-lg-block bg-login-image">
+                                <div class="bg-login-dot" style="text-align:center">
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                    <span class="dot"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <div class="p-5" style="text-align:left">
+                                    <div class="text-center">
+                                        <h1 class="h2 text-white">@Localizer["login"]</h1>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 col-sm-12">
+                                            @Html.ValidationSummary("", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon1" style="border-radius: 0.35rem 0 0 0.35rem; background-color: transparent; color: white; ">
+                                                <i class="bi bi-person"></i>
+                                            </span>
+                                            @Html.TextBoxFor(model => model.Username, new { @class = "form-control form-control-user text-white", @placeholder = Localizer["username"].Value })
+                                        </div>
+                                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="input-group ">
+                                            <span class="input-group-text" id="basic-addon1" style="border-radius: 0.35rem 0 0 0.35rem; background-color: transparent; color: white; ">
+                                                <i class="bi bi-key"></i>
+                                            </span>
+                                            @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user text-white", @placeholder = Localizer["password"].Value })
+                                        </div>
+
+                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="custom-control custom-checkbox">
+                                            @Html.CheckBoxFor(model => model.IsRememberMe, new { @class = "custom-control-input text-white", @id = "RememberMeCheck" })
+                                            <label class="custom-control-label" for="RememberMeCheck"> @Localizer["remember_me"]</label>
+                                        </div>
+                                    </div>
+                                    <div style="text-align:center">
+                                        <button type="submit" class="btn btn-primary">
+                                            <span class="icon">
+                                                <i class="bi bi-check-circle"></i>
+                                            </span>
+                                            <span class="text">@Localizer["login"]</span>
+                                        </button>
+                                    </div>
+
+                                    @Html.HiddenFor(model => model.ReturnUrl)
+                                    <hr>
+                                    <div class="text-center">
+                                        <a class="small" href="#">@Localizer["forgot_password"]</a>
+                                    </div>
+                                    <div class="text-center">
+                                        <a class="small" href="#">@Localizer["create_account"]</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,211 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using semigura.Commons;
+
+@model semigura.Models.S03005ViewModel
+@{
+    ViewBag.Title = Localizer["M_S03005"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S03005.css")))" rel="stylesheet" type="text/css">
+
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-display" style="margin-right: 3.5px;"></i>@Localizer["M_S03005"]</h1>
+</div>
+
+<!-- Content Row -->
+<div class="container">
+    <div class="row" style="margin-left: 20px">
+        <button type="button" class="btn btn-warning" onclick="Back()">
+            <i class="bi bi-arrow-90deg-left"></i> @Localizer["backbtn"]
+        </button>
+    </div>
+    <div class="row form-border">
+        <form id="alertemail-form" role="form" class="inputForm">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div id="dropdown_factory" class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["factory"]:</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.FactoryId,
+                                new SelectList(Model.FactoryList, "Id", "Name"),
+                                "",
+                                new { @class = "select-classic form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+                <div id="dropdown_location" class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["location"]:</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.LocationId,
+                                new SelectList(Model.LocationList, "Id", "Name"),
+                                "",
+                                new { @class = "select-classic form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @{
+                if (Model.Type_ParentId == 1)
+                {
+                    <div class="row">
+                        <div id="dropdown_type" class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form_label">@Localizer["lot"]:</label>
+                                <div class="wapper-input">
+                                    @Html.DropDownListFor(
+                                        model => model.LotId,
+                                        new SelectList(Model.LotList, "Id", "Code"),
+                                        "",
+                                        new { @class = "select-classic form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div id="dropdown_type" class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form_label">@Localizer["type"]:</label>
+                                <div class="wapper-input">
+                                    @Html.DropDownListFor(
+                                        model => model.Type,
+                            new SelectListItem[]{new SelectListItem() {Value="1", Text=@Localizer["type_tank"].Value},
+                            new SelectListItem() {Value="2", Text=@Localizer["type_seigiku"].Value}},
+                                        new { @class = "select-classic form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="dropdown_container" class="col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="form_label">@Localizer["containerid"]：</label>
+                                <div class="wapper-input">
+                                    @Html.DropDownListFor(
+                                        model => model.ContainerId,
+                                        new SelectList(Model.ContainerList, "Id", "Code"),
+                                        "",
+                                        new { @class = "select-classic form-control", @disabled = "disabled" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            }
+
+
+            <div class="row">
+                <div id="dropdown_level" class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["level"]：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.Level,
+                            new SelectListItem[]{new SelectListItem() {Value="1", Text=@Localizer["level_warning"].Value},
+                            new SelectListItem() {Value="2", Text=@Localizer["level_emergency"].Value}},
+                                new { @class = "select-classic form-control", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["created_on"]：</label>
+                        <div class="wapper-input">
+                            @Html.TextBoxFor(model => model.CreatedOn, new { @class = "form-control", @disabled = "disabled", placeholder = "yyyy/MM/dd" })
+                            @Html.ValidationMessageFor(model => model.CreatedOn, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label-customize form_label">@Localizer["title"]：</label>
+                        <div class="wapper-input-customize wapper-input">
+                            @Html.TextBoxFor(model => model.Title, new { @class = "form-control with-customize", @disabled = "disabled" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label-customize form_label">@Localizer["content"]：</label>
+                        <div class="wapper-input-customize wapper-input">
+                            @Html.TextAreaFor(model => model.Content, new { @class = "form-control with-customize", @disabled = "disabled", @rows = "10" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="dropdown_status" class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["status"]：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.Status,
+                            new SelectListItem[]{new SelectListItem() {Value="1", Text=@Localizer["status_open"].Value},
+                            new SelectListItem() {Value="2", Text=@Localizer["status_processing"].Value},
+                            new SelectListItem() {Value="3", Text=@Localizer["status_closed"].Value}},
+                                new { @class = "select-classic form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    <div class="form-group">
+                        <label class="form-label-customize form_label">@Localizer["note"]：</label>
+                        <div class="wapper-input-customize wapper-input">
+                            @Html.TextAreaFor(model => model.Note, new { @class = "form-control with-customize", @rows = "6" })
+                            @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row registerBtn">
+                <div class="col-md-3 col-sm-12 reggisterButton">
+                    <button type="button" class="btn btn-success" onclick="Save()">
+                        <i class="fas fa-check-circle"></i> @Localizer["savebtn"]
+                    </button>
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.Id)
+        </form>
+    </div>
+</div>
+
+@Html.HiddenFor(model => model.ParentId)
+@Html.Hidden("hdLocationId", Model.LocationId)
+
+<input id="is_edit_flg" type="hidden" />
+<input id="main_page_url" type="hidden" value="@Url.Action("Index", "S03005")" />
+<input id="list_container_action_url" type="hidden" value="@Url.Action("GetListContainer", "S03005")" />
+<input id="list_location_action_url" type="hidden" value="@Url.Action("GetListLocation", "S03005")" />
+
+<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("S03005.js")))" type="text/javascript"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

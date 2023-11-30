@@ -1,0 +1,158 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using semigura.Commons;
+@model semigura.Models.S09004ViewModel
+@{
+    ViewBag.Title = Localizer["M_S09004"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S09004.css")))" rel="stylesheet" type="text/css">
+
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-display" style="margin-right: 3.5px;"></i>@Localizer["M_S09004"]</h1>
+</div>
+
+<!-- Content Row -->
+<div class="container">
+    <div class="row" style="margin-left: 20px">
+        <button type="button" class="btn btn-warning" onclick="Back()">
+            <i class="bi bi-arrow-90deg-left"></i> @Localizer["backbtn"]
+        </button>
+    </div>
+    <div class="row form-border">
+        <form id="alertemail-form" role="form" class="inputForm">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["terminal_code"]（<span class="required-label">&#42;</span>）：</label>
+                        <div class="wapper-input">
+                            @Html.TextBoxFor(model => model.Code, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Code, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["terminal_name"]：</label>
+                        <div class="wapper-input">
+                            @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["type"]（<span class="required-label">&#42;</span>）：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.Type,
+                                new SelectList(Model.TypeList, "Type", "TypeLabel"),
+                                "",
+                                new { @class = "select-classic form-control", @onchange = "DisplayChange()" })
+                            @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="dropdown_factory" class="col-md-6 col-sm-12" style="display:none">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["factory"]：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.FactoryId,
+                                new SelectList(Model.FactoryList, "Id", "Name"),
+                                "",
+                                new { @class = "select-classic form-control", @onchange = "FactoryChanged()" })
+                        </div>
+                    </div>
+                </div>
+
+                <div id="dropdown_tank" class="col-md-6 col-sm-12" style="display:none">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["tank"]：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.ContainerId,
+                                new SelectList(Model.ContainerList, "Id", "Code"),
+                                "",
+                                new { @class = "select-classic form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div id="dropdown_location" class="col-md-6 col-sm-12" style="display:none">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["location"]：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                model => model.LocationId,
+                                new SelectList(Model.LocationList, "Id", "Name"),
+                                "",
+                                new { @class = "select-classic form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" style="display:none">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["login_id"]：</label>
+                        <div class="wapper-input">
+                            @Html.TextBoxFor(model => model.LoginId, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.LoginId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["password"]：</label>
+                        <div class="wapper-input">
+                            @Html.TextBoxFor(model => model.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row registerBtn">
+                <div class="col-md-3 col-sm-12 reggisterButton">
+                    <button type="button" class="btn btn-success" onclick="Save()">
+                        <i class="fas fa-check-circle"></i> @Localizer["savebtn"]
+                    </button>
+                </div>
+            </div>
+
+            @Html.HiddenFor(model => model.Id)
+        </form>
+    </div>
+</div>
+
+@Html.HiddenFor(model => model.ParentId)
+<input id="is_edit_flg" type="hidden" />
+<input id="main_page_url" type="hidden" value="@Url.Action("Index", "S09004")" />
+<input id="list_container_action_url" type="hidden" value="@Url.Action("GetListContainer", "S09004")" />
+<input id="list_location_action_url" type="hidden" value="@Url.Action("GetListLocation", "S09004")" />
+
+<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("S09004.js")))" type="text/javascript"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

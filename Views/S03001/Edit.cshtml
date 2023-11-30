@@ -1,0 +1,794 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using semigura.Commons;
+@model semigura.Models.S03001ViewModel
+@{
+    ViewBag.Title = Localizer["M_S03001"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S03001.css")))" rel="stylesheet" type="text/css">
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-display" style="margin-right: 3.5px;"></i>@Localizer["M_S03001"]</h1>
+</div>
+
+<!-- Content Row -->
+<div class="container">
+    <div class="row" style="margin-left: 20px">
+        <button type="button" class="btn btn-warning" onclick="location.href='@Url.Action("Index", "S03001")'">
+            <i class="bi bi-arrow-90deg-left"></i> @Localizer["backbtn"]
+        </button>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row addForm">
+        <form id="inputForm" role="form" class="inputForm">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["lot"]（<span class="required-label">&#42;</span>）:</label>
+                        <label id="S03001_lotID" style="display:none">@Model.LotId</label>
+                        <div class="wapper-input">
+                            <div class="">
+                                @Html.TextBoxFor(model => model.LotCode, new { @class = "showhideFinish form-control", @id = "S03001_lotCode" })
+                                @Html.ValidationMessageFor(model => model.LotCode, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="S03001_addMinWidth1025 form_label">@Localizer["factory"]（<span class="required-label">&#42;</span>）:</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                               m => m.FactoryID,
+                               new SelectList(Model.FactoryList, "Id", "Name"),
+                               "",
+                               new { @class = "showhideFinish form-select form-control select-classic", onchange = "LoadDataByFactoryId()", @id = "S03001_factoryID" })
+                            @Html.ValidationMessageFor(m => m.FactoryID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="form_label">@Localizer["startdate"]：</label>
+                        <div class="wapper-input">
+                            <input type="datetime" class=" datepicker  form-control" style="text-align:left" value="@Model.StartDate.Value.ToString("yyyy/MM/dd")" id="S03001_startDateID">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label class="S03001_addMinWidth1025 form_label">@Localizer["enddate"]：</label>
+                        <div class="wapper-input">
+                            <div class="input-group">
+                                <input id="S03001_endDateID" type="text" value="@Model.EndDate" class="form-control" placeholder="YYYY/MM/DD" aria-describedby="dateFinish" disabled />
+                                @if (Model.EndDate == null)
+                                {
+                                    <button id="dateFinish" type="button" class="btn btn-primary btn-sub" onclick="FinishDateLotEdit(this)" title="@Localizer["btn_finish"]">
+                                        <i class="bi bi-square-fill"></i>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <button id="dateFinish" type="button" class="btn btn-secondary btn-sub" onclick="FinishDateLotEdit(this)" title="@Localizer["btn_finish"]">
+                                        <i class="bi bi-arrow-counterclockwise"></i>
+                                    </button>
+                                }
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+
+            <div class="row">
+                <div class="ricelocation col-md-6 col-sm-12">
+                    <div class="form-group wrap_custom">
+                        <label class="form_label">@Localizer["rice"]：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                               m => m.RiceId,
+                               new SelectList(Model.RiceList, "Id", "Name"),
+                               "",
+                               new { @class = "showhideFinish form-select form-control select-classic", onchange = "LoadDataByRiceId()", @id = "S03001_MaterialID" })
+                            @Html.ValidationMessageFor(m => m.RiceId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="iSeimaibuai">
+                <div class="row sub-row">
+                    <div class="S03001_addMinWidth50Father col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <div class="wapper-input" style="width:100%">
+                                <input type="text" class="selectTank form-control" value="@Localizer["kubun"]" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <div class="">
+                                <div class="wapper-input">
+                                    @Html.DropDownListFor(
+                                        m => m.KubunId,
+                                        new SelectList(Model.KubunList, "Id", "Name"),
+                                        "",
+                                        new { @class = "showhideFinish form-select form-control select-classic", @id = "S03001_KubunID" })
+                                    @Html.ValidationMessageFor(m => m.KubunId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row sub-row">
+                    <div class="S03001_addMinWidth50Father col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <div class="wapper-input" style="width:100%">
+                                <input type="text" class="selectTank form-control" value="@Localizer["seimaibuai"]" disabled />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <div class="">
+                                <div class="wapper-input">
+                                    @Html.DropDownListFor(
+                                    m => m.SemaibuaiId,
+                                    new SelectList(Model.SeimaibuaiList, "Id", "Name"),
+                                    "",
+                                    new { @class = "showhideFinish form-select form-control select-classic", @id = "S03001_SeimaibuaiID", onchange = "LoadDataBySeimaibuaiId()" })
+                                    @Html.ValidationMessageFor(m => m.SemaibuaiId, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row sub-row">
+                    <div class="S03001_addMinWidth50Hide col-md-3 col-sm-12">
+                    </div>
+                    <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <div class="">
+                                <div class="wapper-input">
+                                    @if (Model.SemaibuaiValue == null)
+                                    {
+                                        <input id="S03001_SeimaibuaiValue" type="text" class="showhideFinish form-control" value="@Model.SemaibuaiValue" disabled />
+                                    }
+                                    else
+                                    {
+                                        <input id="S03001_SeimaibuaiValue" type="text" class="showhideFinish form-control" value="@Model.SemaibuaiValue" />
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                        <div class="form-group">
+                            <div class="">
+                                <div class="input-group">
+                                    @Html.TextBoxFor(model => model.RicePolishingRatio, new { @class = "showhideFinish form-control", style = "text-align:right", @id = "S03001_RicePolishingRatio" })
+                                    <span class="input-group-text " id="basic-addon1" style="background-color: transparent;">%</span>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.RicePolishingRatio, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="iRiceInfo">
+                @if (Model.RiceInfo != null)
+                {
+                    <div class="row sub-row">
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="wapper-input" style="width:100%">
+                                    <input type="text" class="selectTank form-control" value="@Localizer["moromi"]" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => model.RiceInfo.MinTempMoromi, new { @class = "showhideFinish inputnumber form-control", style = "text-align:right" })
+                                        @Html.ValidationMessageFor(model => model.RiceInfo.MinTempMoromi, "", new { @class = "text-danger" })
+                                        <span class="input-group-text " id="basic-addon1" style="background-color: transparent;">°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => model.RiceInfo.MaxTempMoromi, new { @class = "showhideFinish inputnumber form-control", style = "text-align:right" })
+                                        @Html.ValidationMessageFor(model => model.RiceInfo.MaxTempMoromi, "", new { @class = "text-danger" })
+                                        <span class="input-group-text " id="basic-addon1" style="background-color: transparent;">°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row sub-row">
+                        <div class="col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="wapper-input" style="width:100%">
+                                    <input type="text" class="selectTank form-control" value="@Localizer["seigiku"]" disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => model.RiceInfo.MinTempSeigiku, new { @class = "showhideFinish inputnumber form-control", @aria_describedby = "basic-addon5", @placeholder = "0", @style = "text-align:right" })
+                                        <span class="input-group-text" id="basic-addon5" style="background-color: transparent;">°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                            <div class="form-group">
+                                <div class="">
+                                    <div class="input-group">
+                                        @Html.TextBoxFor(model => model.RiceInfo.MaxTempSeigiku, new { @class = "showhideFinish inputnumber form-control", @aria_describedby = "basic-addon1", @placeholder = "0", @style = "text-align:right" })
+                                        <span class="input-group-text " id="basic-addon1" style="background-color: transparent;">°C</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+
+            <br />
+            <br />
+
+            <div class="row">
+                <div id="S03001_rowTank" class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label id="S03001_lblTank" class="form_label">@Localizer["tank"]：</label>
+                        <button type="button" class="showhideFinish btn btn-success btn-sub" onclick="AddRowTank()">
+                            <i class="bi bi-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="selected_tanks">
+                @if (Model.TankListId.Count > 0)
+                {
+                    foreach (var iTankId in Model.TankListId)
+                    {
+                        <div class="row sub-row">
+
+                            @if (iTankId.EndDate == null)
+                            {
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="wapper-input" style="width:100%">
+                                            <select class="selectTank select-classic form-control" onchange="LoadInfoTank(this)">
+                                                @if (iTankId != null)
+                                                {
+                                                    <option value=""></option>
+                                                    foreach (var item in Model.TankList)
+                                                    {
+                                                        if (iTankId.Id == item.Id)
+                                                        {
+                                                            <option value="@item.Id" selected>@item.Code</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg))
+                                                            {
+                                                                <option value="@item.Id">@item.Code</option>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                else
+                                                {
+                                                    foreach (var item in Model.TankList)
+                                                    {
+                                                        if (item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg))
+                                                        {
+                                                            <option value="@item.Id">@item.Code</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="">
+                                            <div class="input-group">
+                                                <input type="text" class="inputnumber form-control" placeholder="@Localizer["mint"]" style="text-align:right" aria-describedby="basic-addon1" value="@iTankId.MinTemp">
+                                                <span class="input-group-text" id="basic-addon" style="background-color: transparent;">°C</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="">
+                                            <div class="input-group">
+                                                <input type="text" class="inputnumber form-control" placeholder="@Localizer["maxt"]" style="text-align:right" aria-describedby="basic-addon1" value="@iTankId.MaxTemp">
+                                                <span class="input-group-text" id="basic-addon1" style="background-color: transparent;">°C</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button disabled type="button" class=" btn btn-dark btn-sub" title="@Localizer["btn_start"]"><i class="bi-play-btn-fill"></i></button>
+                                            @if (iTankId.StartDate.HasValue)
+                                            {
+                                                <input type="datetime" class=" datepicker  form-control" style="text-align:left" value="@iTankId.StartDate.Value.ToString("yyyy/MM/dd")" onclick="SelectDateTank(this)">
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class=" form-control" style="text-align:left" placeholder="開始日" value="" onclick="SelectDateTank(this)">
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton input-group">
+                                            @if (iTankId.EndDate.HasValue)
+                                            {
+                                                <input type="datetime" class="datepicker form-control " style="text-align:left" value="@iTankId.EndDate.Value.ToString("yyyy/MM/dd")" disabled>
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class="form-control " style="text-align:left" placeholder="YYYY/MM/DD" value="" disabled>
+                                            }
+                                            @if (iTankId.DeleteFlg == null || (iTankId.DeleteFlg != null && !(bool)iTankId.DeleteFlg))
+                                            {
+                                                <button type="button" class="showhideFinish btn btn-primary btn-sub" title="@Localizer["btn_finish"]" onclick="FinishDateTank(this)"><i class="bi bi-square-fill"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton">
+                                            <button type="button" class="showhideFinish btn btn-danger btn-sub" onclick="RemoveRow(this)" 　data-tooltip="削除"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="wapper-input" style="width:100%">
+                                            <select class="selectTank select-classic form-control" onchange="LoadInfoTank(this)" disabled>
+                                                @if (iTankId != null)
+                                                {
+                                                    <option value=""></option>
+                                                    foreach (var item in Model.TankList)
+                                                    {
+                                                        if (iTankId.Id == item.Id)
+                                                        {
+                                                            <option value="@item.Id" selected>@item.Code</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            if (item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg))
+                                                            {
+                                                                <option value="@item.Id">@item.Code</option>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    foreach (var item in Model.TankList)
+                                                    {
+                                                        if (item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg))
+                                                        {
+                                                            <option value="@item.Id">@item.Code</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="">
+                                            <div class="input-group">
+                                                <input type="text" class="inputnumber form-control" placeholder="@Localizer["mint"]" style="text-align:right" aria-describedby="basic-addon1" value="@iTankId.MinTemp" disabled>
+                                                <span class="input-group-text" id="basic-addon" style="background-color: transparent;">°C</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="">
+                                            <div class="input-group">
+                                                <input type="text" class="inputnumber form-control" placeholder="@Localizer["maxt"]" style="text-align:right" aria-describedby="basic-addon1" value="@iTankId.MaxTemp" disabled>
+                                                <span class="input-group-text" id="basic-addon1" style="background-color: transparent;">°C</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button disabled type="button" class="btn btn-dark btn-sub" title="@Localizer["btn_start"]"><i class="bi-play-btn-fill"></i></button>
+                                            @if (iTankId.StartDate.HasValue)
+                                            {
+                                                <input type="datetime" class=" datepicker form-control" style="text-align:left" value="@iTankId.StartDate.Value.ToString("yyyy/MM/dd")" onclick="SelectDateTank(this)" disabled>
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class=" form-control" style="text-align:left" placeholder="開始日" value="" onclick="SelectDateTank(this)" disabled>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton input-group">
+                                            @if (iTankId.EndDate.HasValue)
+                                            {
+                                                <input type="datetime" class=" datepicker form-control" style="text-align:left" value="@iTankId.EndDate.Value.ToString("yyyy/MM/dd")" disabled>
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class=" form-control" style="text-align:left" placeholder="YYYY/MM/DD" value="" disabled>
+                                            }
+                                            @if (iTankId.DeleteFlg == null || (iTankId.DeleteFlg != null && !(bool)iTankId.DeleteFlg))
+                                            {
+                                                <button type="button" class="showhideFinish btn btn-secondary btn-sub" title="@Localizer["btn_finish"]" onclick="FinishDateTank(this)"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton">
+                                            <button type="button" class="showhideFinish btn btn-danger btn-sub" onclick="RemoveRow(this)" 　data-tooltip="削除"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                            <div class="EndDateTankFinish" style="display:none">@iTankId.EndDate</div>
+                            <div class="S03001_TankIdOld" style="display:none">@iTankId.IdOld</div>
+                        </div>
+                    }
+                }
+            </div>
+
+            <br />
+            <br />
+
+            <div class="row">
+                <div id="S03001_rowLocation" class="ricelocation col-md-6 col-sm-12">
+                    <div class="form-group wrap_custom">
+                        <label id="LabelLocation" class="form_label">@Localizer["location"]（<span class="required-label">&#42;</span>）：</label>
+                        <div class="wapper-input">
+                            @Html.DropDownListFor(
+                                m => m.LocationID,
+                                new SelectList(Model.ListLocation, "Id", "Name"),
+                                "",
+                                new { @class = "showhideFinish form-select form-control select-classic", @id = "S03001_locationID" })
+                            @Html.ValidationMessageFor(m => m.LocationID, "", new { @class = "text-danger" })
+                            <span id="LocationError" class="field-validation-valid text-danger" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div id="S03001_rowSensor" class="col-md-6 col-sm-12">
+                    <div class="form-group">
+                        <label id="S03001_lblSensor" class="form_label">@Localizer["sensor"]：</label>
+                        <button type="button" class="showhideFinish btn btn-success btn-sub" onclick="AddRowSensor()">
+                            <i class="bi bi-plus-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="selected_sensors">
+                @if (Model.SensorListId.Count > 0)
+                {
+                    foreach (var iSensorId in Model.SensorListId)
+                    {
+                        <div class="row sub-row">
+                            @if (iSensorId.EndDate == null)
+                            {
+                                <div class="col-md-3 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="wapper-input" style="width:100%">
+                                            <select class="selectTank select-classic form-control" onchange="LoadInfoSensor(this)">
+                                                @if (iSensorId != null)
+                                                {
+                                                    <option value=""></option>
+                                                    foreach (var item in Model.SensorList)
+                                                    {
+                                                        if (iSensorId.Id == item.Id)
+                                                        {
+                                                            <option value="@item.Id" selected>@item.Code (@item.Name)</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            if ((item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg)) && item.Type == Properties.TERMINAL_TYPE_SEIGIKU)
+                                                            {
+                                                                <option value="@item.Id">@item.Code (@item.Name)</option>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                else
+                                                {
+                                                    foreach (var item in Model.SensorList)
+                                                    {
+                                                        if ((item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg)) && item.Type == Properties.TERMINAL_TYPE_SEIGIKU)
+                                                        {
+                                                            <option value="@item.Id">@item.Code (@item.Name)</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button disabled type="button" class=" btn btn-dark btn-sub" title="@Localizer["btn_start"]"><i class="bi-play-btn-fill"></i></button>
+                                            @if (iSensorId.StartDate.HasValue)
+                                            {
+                                                <input type="datetime" class=" datepicker  form-control" style="text-align:left" value="@iSensorId.StartDate.Value.ToString("yyyy/MM/dd")" onclick="SelectDateTank(this)">
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class=" form-control" style="text-align:left" placeholder="開始日" value="" onclick="SelectDateTank(this)">
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton input-group">
+                                            @if (iSensorId.EndDate.HasValue)
+                                            {
+                                                <input type="datetime" class="datepicker form-control " style="text-align:left" value="@iSensorId.EndDate.Value.ToString("yyyy/MM/dd")" disabled>
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class="form-control " style="text-align:left" placeholder="YYYY/MM/DD" value="" disabled>
+                                            }
+                                            @if (iSensorId.DeleteFlg == null || (iSensorId.DeleteFlg != null && !(bool)iSensorId.DeleteFlg))
+                                            {
+                                                <button type="button" class="showhideFinish btn btn-primary btn-sub" title="@Localizer["btn_finish"]" onclick="FinishDateSensor(this)"><i class="bi bi-square-fill"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton">
+                                            <button type="button" class="showhideFinish btn btn-danger btn-sub" onclick="RemoveRow(this)" 　title="削除"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @*<div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                <div class="form-group">
+                    <div class="">
+                        <div class="input-group">
+                            @if (iSensorId.StartDate.HasValue)
+                            {
+                                <input type="text" class="form-control" style="text-align:left" value="@iSensorId.StartDate.Value.ToString("yyyy/MM/dd")" readonly>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" style="text-align:left" value="" readonly>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <div class="form-group">
+                    <div class="reggisterButton">
+                        <button type="button" class="showhideFinish btn btn-danger btn-sub" onclick="RemoveRow(this)" 　title="削除"><i class="bi bi-trash"></i></button>
+                        @if ((iSensorId.DeleteFlg == null || (iSensorId.DeleteFlg != null && !(bool)iSensorId.DeleteFlg)) && iSensorId.Type == Properties.TERMINAL_TYPE_SEIGIKU)
+                        {
+                            <button type="button" class="showhideFinish btn btn-primary btn-sub" title="@S03001.btn_finish" onclick="FinishDateSensor(this)"><i class="bi bi-square-fill"></i></button>
+                        }
+                    </div>
+                </div>
+            </div>*@
+                            }
+                            else
+                            {
+                                <div class="col-md-3 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="wapper-input" style="width:100%">
+                                            <select class="selectTank select-classic form-control" onchange="LoadInfoSensor(this)" disabled>
+                                                @if (iSensorId != null)
+                                                {
+                                                    <option value=""></option>
+                                                    foreach (var item in Model.SensorList)
+                                                    {
+                                                        if (iSensorId.Id == item.Id)
+                                                        {
+                                                            <option value="@item.Id" selected>@item.Code (@item.Name)</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            if ((item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg)) && item.Type == Properties.TERMINAL_TYPE_SEIGIKU)
+                                                            {
+                                                                <option value="@item.Id">@item.Code (@item.Name)</option>
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
+                                                else
+                                                {
+                                                    foreach (var item in Model.SensorList)
+                                                    {
+                                                        if ((item.DeleteFlg == null || (item.DeleteFlg != null && !(bool)item.DeleteFlg)) && item.Type == Properties.TERMINAL_TYPE_SEIGIKU)
+                                                        {
+                                                            <option value="@item.Id">@item.Code (@item.Name)</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="input-group">
+                                            <button disabled type="button" class="btn btn-dark btn-sub" title="@Localizer["btn_start"]"><i class="bi-play-btn-fill"></i></button>
+                                            @if (iSensorId.StartDate.HasValue)
+                                            {
+                                                <input type="datetime" class=" datepicker form-control" style="text-align:left" value="@iSensorId.StartDate.Value.ToString("yyyy/MM/dd")" onclick="SelectDateTank(this)" disabled>
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class=" form-control" style="text-align:left" placeholder="開始日" value="" onclick="SelectDateTank(this)" disabled>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton input-group">
+                                            @if (iSensorId.EndDate.HasValue)
+                                            {
+                                                <input type="datetime" class=" datepicker form-control" style="text-align:left" value="@iSensorId.EndDate.Value.ToString("yyyy/MM/dd")" disabled>
+                                            }
+                                            else
+                                            {
+                                                <input type="datetime" class=" form-control" style="text-align:left" placeholder="YYYY/MM/DD" value="" disabled>
+                                            }
+                                            @if (iSensorId.DeleteFlg == null || (iSensorId.DeleteFlg != null && !(bool)iSensorId.DeleteFlg))
+                                            {
+                                                <button type="button" class="showhideFinish btn btn-secondary btn-sub" title="@Localizer["btn_finish"]" onclick="FinishDateSensor(this)"><i class="bi bi-arrow-counterclockwise"></i></button>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-2 col-sm-12">
+                                    <div class="form-group">
+                                        <div class="reggisterButton">
+                                            <button type="button" class="showhideFinish btn btn-danger btn-sub" onclick="RemoveRow(this)" 　title="削除"><i class="bi bi-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                @*<div class="S03001_addMinWidth50 col-md-3 col-sm-12">
+                <div class="form-group">
+                    <div class="">
+                        <div class="input-group">
+                            @if (iSensorId.StartDate.HasValue)
+                            {
+                                <input type="text" class="form-control" style="text-align:left" value="@iSensorId.StartDate.Value.ToString("yyyy/MM/dd")" readonly>
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control" style="text-align:left" value="" readonly>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-12">
+                <div class="form-group">
+                    <div class="reggisterButton">
+                        <button type="button" class="showhideFinish btn btn-danger btn-sub" onclick="RemoveRow(this)" 　title="削除"><i class="bi bi-trash"></i></button>
+                        @if ((iSensorId.DeleteFlg == null || (iSensorId.DeleteFlg != null && !(bool)iSensorId.DeleteFlg)) && iSensorId.Type == Properties.TERMINAL_TYPE_SEIGIKU)
+                        {
+                            <button type="button" class="showhideFinish btn btn-secondary btn-sub" title="@S03001.btn_finish" onclick="FinishDateSensor(this)"><i class="bi bi-arrow-counterclockwise"></i></button>
+                        }
+                    </div>
+                </div>
+            </div>*@
+                            }
+                            <div class="EndDateSensorFinish" style="display:none">@iSensorId.EndDate</div>
+                            <div class="S03001_SensorIdOld" style="display:none">@iSensorId.IdOld</div>
+                        </div>
+                    }
+                }
+
+            </div>
+
+            <br />
+            <br />
+
+            <div class="row registerBtn">
+                <div class="btnSave col-md-3 col-sm-12 reggisterButton">
+                    <button type="button" class="btn btn-success" onclick="Save()">
+                        <i class="fas fa-check-circle"></i> @Localizer["savebtn"]
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<input id="main_page_url" type="hidden" value="@Url.Action("Index", "S03001")" />
+<div id="S03001_messageErr" style="display:none">@Localizer["messege"]</div>
+<div id="S03001_Seimaibuai" style="display:none">@Localizer["seimaibuai"]</div>
+<div id="S03001_Moromi" style="display:none">@Localizer["moromi"]</div>
+<div id="S03001_Seigiku" style="display:none">@Localizer["seigiku"]</div>
+<div id="S03001_msg_add_tanksensor" style="display:none">@Localizer["msg_add_tanksensor"]</div>
+<div id="S03001_msg_duplicate" style="display:none">@Localizer["msg_duplicate"]</div>
+<div id="S03001_msg_sensor_empty" style="display:none">@Localizer["msg_sensor_empty"]</div>
+<div id="S03001_msg_tank_empty" style="display:none">@Localizer["msg_tank_empty"]</div>
+<div id="S03001_cfrm_endlotcontainer" style="display:none">@Localizer["cfrm_endlotcontainer"]</div>
+<div id="S03001_cfr_end_otherlot" style="display:none">@Localizer["cfr_end_otherlot"]</div>
+<div id="S03001_cfm_enddatelot" style="display:none">@Localizer["cfm_enddatelot"]</div>
+<div id="S03001_msg_chk_startenddate" style="display:none">@Localizer["msg_chk_startenddate"]</div>
+<div id="S03001_msg_checkminmax" style="display:none">@Localizer["msg_checkminmax"]</div>
+<div id="S03001_other" style="display:none">@Localizer["other"]</div>
+<div id="S03001_temperatureMin" style="display:none">@Localizer["mint"]</div>
+<div id="S03001_temperatureMax" style="display:none">@Localizer["maxt"]</div>
+
+<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("S03001.js")))" type="text/javascript"></script>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

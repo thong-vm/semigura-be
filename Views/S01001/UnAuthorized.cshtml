@@ -1,0 +1,7 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@{
+    ViewBag.Title = @Localizer["unauthorized"];
+}
+
+<h2>@Localizer["unauthorized"]</h2>

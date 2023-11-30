@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="alert" xml:space="preserve">
+    <value>アラート</value>
+  </data>
+  <data name="all" xml:space="preserve">
+    <value>すべて</value>
+  </data>
+  <data name="C01001" xml:space="preserve">
+    <value>{0}を入力してください。</value>
+  </data>
+  <data name="C01002" xml:space="preserve">
+    <value>{0}の長さが上限を超えています。</value>
+  </data>
+  <data name="C01003" xml:space="preserve">
+    <value>エラーが発生しました。 システム管理者に連絡してください。</value>
+  </data>
+  <data name="C01004" xml:space="preserve">
+    <value>アイテムが存在しません。</value>
+  </data>
+  <data name="C01005" xml:space="preserve">
+    <value>{0}を選択してください。</value>
+  </data>
+  <data name="C01006" xml:space="preserve">
+    <value>端末がシステムに登録されていません。(デバイスのコード：{0})</value>
+  </data>
+  <data name="C01007" xml:space="preserve">
+    <value>端末がサーバーに接続していませんので、ストリーム出来ません。</value>
+  </data>
+  <data name="C01008" xml:space="preserve">
+    <value>同じIDのある別のデバイスがサーバーに接続していますので、本要求が拒否されます。</value>
+  </data>
+  <data name="C01009" xml:space="preserve">
+    <value>最大メッセージサイズ：{0}バイト。</value>
+  </data>
+  <data name="connecting" xml:space="preserve">
+    <value>接続中...</value>
+  </data>
+  <data name="dialog_alert_closebtn" xml:space="preserve">
+    <value>クローズ</value>
+  </data>
+  <data name="dialog_alert_title" xml:space="preserve">
+    <value>通知</value>
+  </data>
+  <data name="dialog_confirm_closebtn" xml:space="preserve">
+    <value>キャンセル</value>
+  </data>
+  <data name="dialog_confirm_logout" xml:space="preserve">
+    <value>ログアウトしますか？</value>
+  </data>
+  <data name="dialog_confirm_okbtn" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="dialog_confirm_title" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="empty_table" xml:space="preserve">
+    <value>テーブルにデータがありません</value>
+  </data>
+  <data name="error_page" xml:space="preserve">
+    <value>エラーページ</value>
+  </data>
+  <data name="format" xml:space="preserve">
+    <value>{0}</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>言語</value>
+  </data>
+  <data name="lengthCheck" xml:space="preserve">
+    <value>{1}文字を超えて入力しないでください</value>
+  </data>
+  <data name="logout" xml:space="preserve">
+    <value>ログアウト</value>
+  </data>
+  <data name="M_ADMINISTRATOR" xml:space="preserve">
+    <value>管理者用</value>
+  </data>
+  <data name="M_MAIN" xml:space="preserve">
+    <value>メイン</value>
+  </data>
+  <data name="M_S01001" xml:space="preserve">
+    <value>ログイン</value>
+  </data>
+  <data name="M_S01002" xml:space="preserve">
+    <value>ホーム</value>
+  </data>
+  <data name="M_S02000" xml:space="preserve">
+    <value>工程管理</value>
+  </data>
+  <data name="M_S02001" xml:space="preserve">
+    <value>もろみ工程管理</value>
+  </data>
+  <data name="M_S02002" xml:space="preserve">
+    <value>製麴工程管理</value>
+  </data>
+  <data name="M_S02003" xml:space="preserve">
+    <value>室温管理</value>
+  </data>
+  <data name="M_S03000" xml:space="preserve">
+    <value>共通機能</value>
+  </data>
+  <data name="M_S03001" xml:space="preserve">
+    <value>仕込号数管理</value>
+  </data>
+  <data name="M_S03002" xml:space="preserve">
+    <value>タンク管理</value>
+  </data>
+  <data name="M_S03003" xml:space="preserve">
+    <value>製麴管理</value>
+  </data>
+  <data name="M_S03004" xml:space="preserve">
+    <value>手帳出力</value>
+  </data>
+  <data name="M_S03005" xml:space="preserve">
+    <value>警告管理</value>
+  </data>
+  <data name="M_S03006" xml:space="preserve">
+    <value>桶長</value>
+  </data>
+  <data name="M_S09000" xml:space="preserve">
+    <value>システム設定</value>
+  </data>
+  <data name="M_S09001" xml:space="preserve">
+    <value>材料マスター</value>
+  </data>
+  <data name="M_S09002" xml:space="preserve">
+    <value>アラートメール</value>
+  </data>
+  <data name="M_S09003" xml:space="preserve">
+    <value>タンクマスター</value>
+  </data>
+  <data name="M_S09004" xml:space="preserve">
+    <value>センサーマスター</value>
+  </data>
+  <data name="notification" xml:space="preserve">
+    <value>警告：</value>
+  </data>
+  <data name="rankCheck" xml:space="preserve">
+    <value>{0}は{1}より大きく{2}未満である必要があります。</value>
+  </data>
+  <data name="save_completed" xml:space="preserve">
+    <value>保存が正常に完了しました。</value>
+  </data>
+  <data name="spinner_loading" xml:space="preserve">
+    <value>読み込み中...</value>
+  </data>
+  <data name="system_name" xml:space="preserve">
+    <value>酒造管理システム</value>
+  </data>
+  <data name="unauthorized" xml:space="preserve">
+    <value>許可されていません</value>
+  </data>
+</root>

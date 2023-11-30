@@ -1,0 +1,71 @@
+﻿@inject IViewLocalizer Localizer
+@using semigura.Commons;
+@using Microsoft.AspNetCore.Mvc.Localization
+
+@model semigura.Models.S02003ViewModel
+@{
+    ViewBag.Title = Localizer["M_S02003"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S02003.css")))" rel="stylesheet" type="text/css">
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-display" style="margin-right: 3.5px;"></i>@Localizer["M_S02003"]</h1>
+</div>
+
+
+
+<!-- Content Row -->
+<div class="container">
+    <div class="row header">
+        <div class="col-md-6 col-sm-12 select_block">
+            <h6 class="select_title">
+                @Localizer["factory"] :
+            </h6>
+            <div class="wapper-input">
+                @Html.DropDownListFor(
+                            model => model.FactoryId,
+                            new SelectList(Model.FactoryList, "Id", "Name"),
+                            new { @class = "select-classic form-control", @onchange = "LoadDataByFactoryId()" })
+            </div>
+        </div>
+        <span class="changeheightMobile"> </span>
+        <div class="col-md-6 col-sm-12 select_block">
+            <h6 class="select_title">
+                @Localizer["location"] :
+            </h6>
+            <div class="wapper-input">
+                @Html.DropDownListFor(
+                            model => model.LocationId,
+                            new SelectList(Model.LocationList, "Id", "Name"),
+                            new { @class = "select-classic form-control", @onchange = "GetDataByLocationId()" })
+            </div>
+        </div>
+    </div>
+    <hr width="100%" align="center" color="white" class="header_under" />
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row process_content" id="display_data">
+    </div>
+</div>
+
+<input id="allLocation" type="hidden" value="@Localizer["all"]" />
+<input id="oneDate" type="hidden" value="@Localizer["oneDay"]" />
+<input id="searchLabel" type="hidden" value="@Localizer["search"]" />
+<input id="room_temp" type="hidden" value="@Localizer["room_temp"]" />
+<input id="room_humi" type="hidden" value="@Localizer["room_humi"]" />
+<input id="chart_temp" type="hidden" value="@Localizer["temperature"]" />
+<input id="chart_humi" type="hidden" value="@Localizer["humidity"]" />
+<input id="temp_icon" type="hidden" value="@Url.Content("~/Content/dev/icon/room-temp.png")" />
+<input id="humi_icon" type="hidden" value="@Url.Content("~/Content/dev/icon/humidity.png")" />
+<input id="cookies_FactoryId" type="hidden" value="@Properties.COOKIES_S02003_FACTORYID" />
+<input id="cookies_LocationId" type="hidden" value="@Properties.COOKIES_S02003_LOCATIONID" />
+
+<script src="@Url.Content("~/Content/bases/vendor/chart.js/Chart.min.js")"></script>
+<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("S02003.js")))" type="text/javascript"></script>
+
+

@@ -1,0 +1,385 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using semigura.Commons;
+@model semigura.Models.S02001ViewModel
+@{
+    ViewBag.Title = Localizer["M_S02001"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S02001.css")))" rel="stylesheet" type="text/css">
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-display" style="margin-right: 3.5px;"></i>@Localizer["M_S02001"]</h1>
+</div>
+
+<!-- Content Row -->
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+                <label class="form_label select_title">@Localizer["factory"] :</label>
+                <div class="wapper-input">
+                    @Html.DropDownListFor(
+                                model => model.FactoryId,
+                                new SelectList(Model.FactoryList, "Id", "Name"),
+                                new { @class = "select-classic form-control", @onchange = "LoadDataByFactoryId()" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+                <label class="form_label label-check">@Localizer["lotStatus"] :</label>
+                <div class="wapper-input check_customer">
+                    @Html.CheckBoxFor(model => model.IsInUse, new { @class = "form-control", @onchange = "LoadDataByFactoryId()" })
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+                <label class="form_label select_title">@Localizer["lot"] :</label>
+                <div class="wapper-input">
+                    @Html.DropDownListFor(
+                                    model => model.LotId,
+                                    new SelectList(Model.LotList, "Id", "Code"),
+                                    new { @class = "select-classic form-control", @onchange = "GetListTankByLotID()" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+                <label class="form_label select_title">@Localizer["tank"] :</label>
+                <div class="wapper-input">
+                    @Html.DropDownListFor(
+                                    model => model.LotContainerId,
+                                    new SelectList(Model.TankList, "LotContainerId", "Code"),
+                                    new { @class = "select-classic  form-control", @onchange = "GetDataByTankId()" })
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="form-group">
+                <label class="form_label select_title">@Localizer["location"] :</label>
+                <div class="wapper-input">
+                    <select class="select-classic form-control" id="LocationId" name="LocationId" disabled>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <hr width="100%" align="center" color="white" class="header_under" />
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="displayByTankId" id="displayByTankId">
+        <div class="row process_status" id="process_status">
+            <div class="row manualInput">
+                <button type="button" class="btn btn-primary" id="S02001_editBtn" disabled
+                        onclick="DirectEdit()">
+                    @Localizer["inputData"]
+                </button>
+            </div>
+            <div class="row process_staus_time" id="room_status-time">
+                <label id="DataEntryMeasuareDate">@Localizer["yearMD"] @Localizer["timePoint"]</label>
+            </div>
+            <div class="row process_content">
+                <div class=" room_status" id="room_status">
+                    <div class="room_status-border">
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["roomTemp"]</p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="LocationTemperature"></span>
+                                <span>°C</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/room-temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;'@Localizer["roomHumi"]</p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="LocationHumidity"></span>
+                                <span>%</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/humidity.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="buffer_block1"></div>
+                <div class="temperature_status">
+                    <div class="detail_temp_block">
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["TempTop"]</p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="ProductTemperature1"></span>
+                                <span>°C</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_title">
+                                <p>
+                                    &nbsp;@Localizer["TempMid"]
+                                </p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="ProductTemperature2"></span>
+                                <span>°C</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["TempBot"]</p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="ProductTemperature3"></span>
+                                <span>°C</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["tempAvg"]</p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="ProductTemperatureAvg"></span>
+                                <span>°C</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" row buffer_block2"></div>
+                    <div class="detail_temp_block">
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["baume2"]</p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="BaumeDegree"></span>
+                                <span>@Localizer["unit"]</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["alcohol"]</p>
+                            </div>
+                            <div class="content_desc">
+                                <span id="AlcoholDegree"></span>
+                                <span>@Localizer["unit"]</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["acid"]</p>
+                            </div>
+                            <div class="content_desc" id="acid_display">
+                                <span id="Acid"></span>
+                                <span>ml</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                        <div class="content">
+                            <div class="content_title">
+                                <p>&nbsp;@Localizer["amomiAcid"]</p>
+                            </div>
+                            <div class="content_desc" id="aminoAcid_display">
+                                <span id="AminoAcid"></span>
+                                <span>ml</span>
+                            </div>
+                            <div class="content_icon">
+                                <img src="@Url.Content("~/Content/dev/icon/temp.png")" alt="temp.png" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row display_data_table ">
+            <div class="col_header">
+                <table id="headerTable" class="table table-striped table-bordered" style="width: 100%;">
+                    <thead style="display: none">
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="2">@Localizer["noCol"]</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">@Localizer["dateCol"]</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">@Localizer["tempRoomCol"] (°C)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">@Localizer["avgTempCol"] (°C)</td>
+                        </tr>
+                        <tr>
+                            <td>@Localizer["baume2"] (@Localizer["unit"])</td>
+                            <td rowspan="2">@Localizer["dochira"]</td>
+                        </tr>
+                        <tr>
+                            <td>@Localizer["nihonsyu"] (@Localizer["unit"])</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">@Localizer["alcohol"] (@Localizer["unit"])</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">@Localizer["acid"] (ml)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">@Localizer["amomiAcid"] (ml)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">@Localizer["glucose"] (g/100ml)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="col_body">
+                <table id="displayDataTable" class="table table-striped table-bordered" style="width:100%;">
+                    <thead style="display: none">
+                        <tr>
+                            <th>1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="display_table_header1">1</td>
+                        </tr>
+                        <tr>
+                            <td class="display_table_header2"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+        <button type="button" class="btn btn-outline-secondary" onclick="SaveDataUpdate()" style="color: #fff; background-color: #17a673; border-color: #169b6b; margin-left: 50%;">
+            <i class="fas fa-check-circle"></i></i>
+            <span>@Localizer["save"]</span>
+        </button>
+        <div class="row display_content">
+            <div class="col-md-12 col-sm-12 chart_content">
+                <canvas id="S02001_lineChart"></canvas>
+            </div>
+            <div class="col-md-12 col-sm-12 stream_content">
+                <div class="row" style="margin-left: 0rem; margin-right: 0rem; ">
+                    <div class="col-12">
+                        <div class="col-12 btn-group mb-3" style="display: -webkit-box ">
+                            <button type="button" class="btn btn-outline-secondary" onclick="ChangViewMode(0)">
+                                <i class="bi bi-card-image"></i>
+                                <span>@Localizer["imageLabel"]</span>
+                            </button>
+                            <button id="liveBtn" type="button" class="btn btn-outline-secondary" onclick="ChangViewMode(1)">
+                                <i class="bi bi-circle-fill" style="color:red"></i>
+                                <span class="visually-hidden">Live</span>
+                            </button>
+                        </div>
+                        <div class="col-12 media_frame">
+                            <div id="img-frame" class="img-frame">
+                            </div>
+                            <div id="live-frame" class="bg-img live-frame">
+                                <img src="" class="media_content" />
+                                <span class="video-live-over"><i class="bi bi-circle-fill" style="color:red"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row displayNotification">
+        <span class="displayMsg" id="displayMsg">
+            @Localizer["factory"], @Localizer["lot"], @Localizer["tank"] を選んでください。
+        </span>
+    </div>
+
+</div>
+
+
+<input id="edit_action_url" type="hidden" value="@Url.Action("Edit", "S02001")" />
+<input id="image_url" type="hidden" value="@Url.Action("GetImageFromNAS", "S01001")" />
+<input id="unitLanguage" type="hidden" value="@Localizer["unit"]" />
+<input id="timePoint" type="hidden" value="@Localizer["timePoint"]" />
+<input id="yearMD" type="hidden" value="@Localizer["yearMD"]" />
+<input id="factoryLabel" type="hidden" value="@Localizer["factory"]" />
+<input id="lotLabel" type="hidden" value="@Localizer["lot"]" />
+<input id="tankLabel" type="hidden" value="@Localizer["tank"]" />
+<input id="avgTempCol" type="hidden" value="@Localizer["avgTempCol"] (°C)" />
+<input id="baume2" type="hidden" value="@Localizer["baume2"] (@Localizer["unit"])" />
+<input id="roomTemp" type="hidden" value="@Localizer["tempRoomCol"] (°C)" />
+<input id="alcohol" type="hidden" value="@Localizer["alcohol"] (@Localizer["unit"])" />
+
+<input id="cookies_FactoryId" type="hidden" value="@Properties.COOKIES_S02001_FACTORYID" />
+<input id="cookies_LotId" type="hidden" value="@Properties.COOKIES_S02001_LOTID" />
+<input id="cookies_LotContainerId" type="hidden" value="@Properties.COOKIES_S02001_LOTCONTAINERID" />
+<input id="cookies_IsInUse" type="hidden" value="@Properties.COOKIES_S02001_ISINUSE" />
+<div id="S02001_cfm_SaveEdit" style="display:none">@Localizer["cfm_SaveEdit"]</div>
+
+
+<script src="@Url.Content("~/Content/bases/vendor/chart.js/Chart.min.js")"></script>
+<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("S02001.js")))" type="text/javascript"></script>

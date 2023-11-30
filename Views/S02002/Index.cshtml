@@ -1,0 +1,115 @@
+﻿@using semigura.Commons;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model semigura.Models.S02002ViewModel
+@{
+    ViewBag.Title = Localizer["M_S02002"];
+}
+
+<link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("S02002.css")))" rel="stylesheet" type="text/css">
+
+<!-- Page Heading -->
+<div class="d-sm-flex align-items-center justify-content-between mb-4 home_header">
+    <h1 class="h3 mb-0 text-gray-800"><i class="bi bi-display" style="margin-right: 3.5px;"></i>@Localizer["M_S02002"]</h1>
+</div>
+<!-- Content Row -->
+<div class="container">
+    <div class="row header">
+        <div class="col-xl-5 col-lg-12 col-md-12 col-sm-12 select_block">
+            <h6 class="select_title">
+                @Localizer["factory"] :
+            </h6>
+            <div class="wapper-input">
+                @Html.DropDownListFor(
+                            model => model.FactoryId,
+                            new SelectList(Model.FactoryList, "Id", "Name"),
+                            new { @class = "select-classic form-control", @onchange = "LoadDataByFactoryId()" })
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-12 col-md-12 col-sm-12 select_block select_block_customer">
+            <h6 class="select_title">
+                @Localizer["lotStatus"] :
+            </h6>
+            <div class="wapper_check wapper-input check_customer">
+                @Html.CheckBoxFor(model => model.IsInUse, new { @class = "form-control", @onchange = "LoadDataByFactoryId()" })
+            </div>
+        </div>        
+        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 select_block">
+            <h6 class="select_title">
+                @Localizer["lot"] :
+            </h6>
+            <div class="wapper-input">
+                @Html.DropDownListFor(
+                            model => model.LotId,
+                            new SelectList(Model.LotList, "Id", "Code"),
+                            new { @class = "select-classic form-control", @onchange = "GetDataByLotId()" })
+            </div>
+        </div>
+    </div>
+    <hr width="100%" align="center" color="white" class="header_under" />
+    <div class="row">
+        <div class="col-md-12 col-sm-12">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="row process_content" id="process_content">
+        <div class="room_block" id="S02002_room_block">
+            <div class="content">
+                <div class="content_title">
+                    <p>&nbsp;@Localizer["room_temp"]</p>
+                </div>
+                <div class="content_desc" id="locationTemperature">
+                    <p>°C</p>
+                </div>
+                <div class="content_icon">
+                    <img src="@Url.Content("~/Content/dev/icon/room-temp.png")" alt="temp.png" />
+                </div>
+            </div>
+            <div class="content">
+                <div class="content_title">
+                    <p>&nbsp;@Localizer["room_humi"]</p>
+                </div>
+                <div class="content_desc" id="locationHumidity">
+                    <p>%</p>
+                </div>
+                <div class="content_icon">
+                    <img src="@Url.Content("~/Content/dev/icon/humidity.png")" alt="temp.png" />
+                </div>
+            </div>
+        </div>
+        <div class="sensor_block" id="sensor_block">
+        </div>
+        <div class="w-100 chart_content" id="S02002_chart_content">
+            <div class="row searchBlock">
+                <button class="btn btn-success search_button" onclick="GetDataByLotId()">
+                    @Localizer["factory"]
+                </button>
+                <button class="btn btn-success search_button" onclick="GetDataByLastDay()">
+                    @Localizer["nearDay"]
+                </button>
+                <input id="S02002_search_date" type="date" class="search_date" placeholder="yyyy/MM/dd" />
+                <button class="btn btn-warning " onclick="GetDataBySearchDay()">
+                    <i class="bi bi-search"></i> @*@S02002.search*@
+                </button>
+            </div>
+            <div class="chart_display">
+                <canvas id="S02002_lineChart"></canvas>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<input id="temp_i" type="hidden" value="@Url.Content("~/Content/dev/icon/temp.png")" />
+<input id="room_temp_i" type="hidden" value="@Url.Content("~/Content/dev/icon/room-temp.png")" />
+<input id="room_humi_i" type="hidden" value="@Url.Content("~/Content/dev/icon/humidity.png")" />
+<input id="temperatureLabel" type="hidden" value="@Localizer["temperature"]" />
+<input id="room_temp_label" type="hidden" value="@Localizer["room_temp"]" />
+<input id="room_humi_label" type="hidden" value="@Localizer["room_humi"]" />
+<input id="cookies_FactoryId" type="hidden" value="@Properties.COOKIES_S02002_FACTORYID" />
+<input id="cookies_LotId" type="hidden" value="@Properties.COOKIES_S02002_LOTID" />
+<input id="cookies_IsInUse" type="hidden" value="@Properties.COOKIES_S02002_ISINUSE" />
+
+
+<script src="@Url.Content("~/Content/bases/vendor/chart.js/Chart.min.js")"></script>
+<script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("S02002.js")))" type="text/javascript"></script>

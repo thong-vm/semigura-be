@@ -1,0 +1,688 @@
+@using Microsoft.AspNetCore.Localization;
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@using System.Text.Json;
+@using System.Diagnostics;
+@using System.Security.Claims;
+@using semigura.DBContext.Models;
+@using semigura.Commons;
+@using semigura.Models;
+@using Microsoft.AspNetCore.Http;
+@using Microsoft.Extensions.Options;
+@inject IOptions<RequestLocalizationOptions> LocOptions
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    //List<AuthorInfoModel> AuthorInfoModelList = Session[Properties.AUTHOR_INFO] != null ? (List<AuthorInfoModel>)Session[Properties.AUTHOR_INFO] : null;
+    //UserInfoModel UserInfo = Session[Properties.USER_INFO] != null ? (UserInfoModel)Session[Properties.USER_INFO] : null;
+    string user = HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Name);
+    string role = HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+    string userData = HttpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.UserData);
+    List<AuthorInfoModel> AuthorInfoModelList = null;
+    UserInfoModel UserInfo = null;
+    try
+    {
+        UserDataModel userDataModel = JsonSerializer.Deserialize<UserDataModel>(userData);
+        AuthorInfoModelList = userDataModel.authorInfoModelList;
+        UserInfo = userDataModel.userInfoModel;
+    }
+    catch (Exception e)
+    {
+        Debug.WriteLine("[Layout] " + e.Message);
+    }
+
+    var menuAdminGroupName = "S09000";
+
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+    var cultureItems = LocOptions.Value.SupportedUICultures
+    .Select(c => new SelectListItem { Value = c.Name, Text = c.DisplayName })
+    .ToList();
+    var culture = requestCulture.RequestCulture.Culture;
+
+
+    var loginViewModel = new S01001ViewModel();
+    //if (userInfoModel != null)
+    //{
+    //    loginViewModel.OldUsername = userInfoModel.Username;
+    //}
+    if (!string.IsNullOrEmpty(user))
+    {
+        loginViewModel.OldUsername = user;
+    }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="@Url.Content("~/Content/dev/asset/icon/flower1.svg")">
+    <title>@ViewBag.Title</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="@Url.Content("~/Content/bases/vendor/fontawesome-free/css/all.min.css")" rel="stylesheet" type="text/css">
+    <link href="@Url.Content("~/Content/bases/css/fonts_googleapis.css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i")" rel="stylesheet">
+
+    <!-- bootstrap-icons styles -->
+    <link href="@Url.Content("~/Content/bases/vendor/bootstrap/font/bootstrap-icons.css")" rel="stylesheet">
+
+    <!-- flag-icons styles -->
+    <link href="@Url.Content("~/Content/bases/vendor/flag-icons/css/flag-icons.css")" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript-->
+    <!--script src="@Url.Content("~/Content/bases/vendor/jquery/jquery.min.js")"></!--script-->
+    <script src="@Url.Content("~/Content/bases/vendor/jquery/jquery-1.12.4.min.js")"></script>
+
+    <script src="@Url.Content("~/Content/bases/vendor/bootstrap/js/bootstrap.bundle.min.js")"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="@Url.Content("~/Content/bases/vendor/jquery-easing/jquery.easing.min.js")"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="@Url.Content("~/Content/bases/vendor/jsmpeg/jsmpeg.min.js")"></script>
+
+    <link rel="stylesheet" type="text/css" href="@Url.Content("~/Content/dev/DataTables/datatables.min.css")">
+    <script type="text/javascript" charset="utf8" src="@Url.Content("~/Content/dev/DataTables/datatables.min.js")"></script>
+
+    <!-- bootstrap select CSS, JavaScript -->
+    <link href="@Url.Content("~/Content/bases/vendor/bootstrap-select/bootstrap-select.min.css")" rel="stylesheet" type="text/css">
+    <script type="text/javascript" charset="utf8" src="@Url.Content("~/Content/bases/vendor/bootstrap-select/bootstrap-select.min.js")"></script>
+
+    <!-- moment JavaScript -->
+    <script type="text/javascript" charset="utf8" src="@Url.Content("~/Content/bases/vendor/moment/moment.min.js")"></script>
+
+    @*@Scripts.Render("~/bundles/jqueryval")*@
+    @*@Scripts.Render("~/bundles/modernizr")*@
+
+    @*------------------------------------------------------------------------------------------------------------------------------------------------*@
+    <!-- Custom styles for this template-->
+    <link href="@Url.Content(string.Format("~/Content/bases/css/{0}", Utils.GetMinifiedFileName("sb-admin-2.css")))" rel="stylesheet" type="text/css">
+
+    <!-- Custom scripts for all pages-->
+    <script src="@Url.Content(string.Format("~/Content/bases/js/{0}", Utils.GetMinifiedFileName("sb-admin-2.js")))" type="text/javascript"></script>
+
+    <!-- Common styles -->
+    <link href="@Url.Content(string.Format("~/Content/dev/css/{0}", Utils.GetMinifiedFileName("commons.css")))" rel="stylesheet" type="text/css">
+
+    <!-- Common JS-->
+    <script src="@Url.Content(string.Format("~/Content/dev/js/{0}", Utils.GetMinifiedFileName("commons.js")))" type="text/javascript"></script>
+
+    @*datepicker*@
+    <link href="@Url.Content("~/Content/bases/vendor/datepicker/css/jquery-ui.min.css")" rel="stylesheet">
+    <script src=@Url.Content("~/Content/bases/vendor/datepicker/js/jquery-ui-1.12.1.min.js")></script>
+    @*@RenderSection("scripts", required: false)*@
+
+
+</head>
+<body id="page-top" class="sidebar-toggled">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav sidebar accordion main-bg" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="@Url.Action("Index", "S01002")">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="bi bi-flower1"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">@Localizer["system_name"]</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0" />
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="@Url.Action("Index", "S01002")">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>@Localizer["M_S01002"]</span>
+                </a>
+            </li>
+
+
+            <!-- Nav Item - Utilities Collapse Menu -->
+            @if (AuthorInfoModelList != null && AuthorInfoModelList.Any() && AuthorInfoModelList.Where(s => s.Level == 0 && !s.ControllerName.StartsWith(menuAdminGroupName)).Any())
+            {
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    <h6>@Localizer["M_MAIN"]</h6>
+                </div>
+
+                <li class="nav-item">
+                    @foreach (var authorInfo in AuthorInfoModelList.Where(s => s.Level == 0 && !s.ControllerName.StartsWith(menuAdminGroupName)).ToList())
+                    {
+                        <a class="nav-link dropdown" href="#" data-toggle="collapse" data-target="#@authorInfo.ControllerName" aria-expanded="true" aria-controls="collapseUtilities" onclick="HideCollapseOther(this)">
+                            <i class="bi @authorInfo.IconClass"></i>
+                            <span>@Localizer[@authorInfo.ResourceName]</span>
+                        </a>
+                        <div id="@authorInfo.ControllerName" class="collapse main-bg show" aria-labelledby="headingUtilities">
+                            <div class="py-2 collapse-inner rounded">
+                                @if (authorInfo.ChildList != null && authorInfo.ChildList.Any())
+                                {
+                                    foreach (var childObj in authorInfo.ChildList)
+                                    {
+                                        <a class="collapse-item2" href="@Url.Action(@childObj.ActionName, @childObj.ControllerName)"><i class="bi @childObj.IconClass" style="margin-right:3.5px"></i><span>@Localizer[@childObj.ResourceName]</span></a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </li>
+            }
+
+
+            <!-- Nav Item - Pages Collapse Menu -->
+            @if (AuthorInfoModelList != null && AuthorInfoModelList.Any() && AuthorInfoModelList.Where(s => s.Level == 0 && s.ControllerName.StartsWith(menuAdminGroupName)).Any())
+            {
+                <!-- Divider -->
+                <hr class="sidebar-divider">
+
+                <!-- Heading -->
+                <div class="sidebar-heading">
+                    <h6>@Localizer["M_ADMINISTRATOR"]</h6>
+                </div>
+
+                <li class="nav-item">
+                    @foreach (var authorInfo in AuthorInfoModelList.Where(s => s.Level == 0 && s.ControllerName.StartsWith(menuAdminGroupName)).ToList())
+                    {
+                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#@authorInfo.ControllerName" aria-expanded="true" aria-controls="collapseUtilities" onclick="HideCollapseOther(this)">
+                            <i class="bi @authorInfo.IconClass"></i>
+                            <span>@Localizer[@authorInfo.ResourceName]</span>
+                        </a>
+                        <div id="@authorInfo.ControllerName" class="collapse main-bg" aria-labelledby="headingUtilities">
+                            <div class="py-2 collapse-inner rounded">
+                                @if (authorInfo.ChildList != null && authorInfo.ChildList.Any())
+                                {
+                                    foreach (var childObj in authorInfo.ChildList)
+                                    {
+                                        <a class="collapse-item2" href="@Url.Action(@childObj.ActionName, @childObj.ControllerName)"><i class="bi @childObj.IconClass" style="margin-right:3.5px"></i><span>@Localizer[@childObj.ResourceName]</span></a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </li>
+            }
+        </ul>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content" style="height: 91vh;">
+
+                <!-- Topbar -->
+                <nav id="HeaderAlways" class="navbar navbar-expand navbar-light topbar static-top main-bg">
+
+                    <button type="button" id="sidebarToggleTop" class="btn app-icon" style="border: 1px solid gray;" onclick="ToggleMenu()">
+                        <i class="bi bi-bar-chart-steps"></i>
+                    </button>
+
+                    <span style="margin:10px"></span>
+
+                    <!-- Full screen -->
+                    <button type="button" class="btn app-icon" style="border: 1px solid gray;" onclick="ToggleFullScreen()">
+                        <i class="bi bi-arrows-fullscreen"></i>
+                    </button>
+
+
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <div class="digital-clock" style="display:none;">
+                            <h5 id="digital-clock"></h5>
+                        </div>
+                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <li class="nav-item dropdown">
+                            @{
+                                var curLangLabel = LanguageUtil.AvailableLanguages[0].LanguageFullName;
+                                var curFlgIcon = LanguageUtil.AvailableLanguages[0].FlagIcon;
+                                foreach (var i in LanguageUtil.AvailableLanguages)
+                                {
+                                    if (i.LanguageCultureName == culture.Name)
+                                    {
+                                        curLangLabel = i.LanguageFullName;
+                                        curFlgIcon = i.FlagIcon;
+                                        break;
+                                    }
+                                }
+
+                                <a class="nav-link dropdown-toggle " href="#" id="dropdown09" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="flag-icon flag-icon-@curFlgIcon" style="margin:3.5px"> </span> @curLangLabel</a>
+                            }
+
+
+                            <div class="dropdown-menu" aria-labelledby="dropdown09">
+                                @{
+                                    foreach (var i in LanguageUtil.AvailableLanguages)
+                                    {
+                                        <a class="dropdown-item " href="#" onclick="ChangeCulture('@i.LanguageCultureName')"><span class="flag-icon flag-icon-@i.FlagIcon" style="margin:3.5px"> </span>@i.LanguageFullName</a>
+
+                                        <text> </text>
+                                    }
+                                }
+                            </div>
+                        </li>
+
+
+                        <!-- Nav Item - Alerts -->
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <!-- Counter - Alerts -->
+                                <span class="badge badge-danger badge-counter"></span>
+                            </a>
+                            <!-- Dropdown - Alerts -->
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">
+                                    @Localizer["alert"]
+                                </h6>
+                                <div class="alert-item">
+                                </div>
+                                <a class="dropdown-item text-center small text-gray-500" href="@Url.Action("Index", "S03005")?SearchStatus[0]=1&SearchStatus[1]=2">@Localizer["all"]</a>
+                            </div>
+                        </li>
+
+
+                        <div class="topbar-divider d-none d-sm-block"></div>
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item dropdown no-arrow">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline  text-white">
+                                    @if (UserInfo != null)
+                                    {
+                                        @UserInfo.Username
+                                    }
+                                </span>
+                                <img class="img-profile rounded-circle"
+                                     src="@Url.Content("~/Content/bases/img/undraw_profile.svg")">
+                            </a>
+                            <!-- Dropdown - User Information -->
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                 aria-labelledby="userDropdown">
+                                <a class="dropdown-item" href="#" onclick="Logout()">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    @Localizer["logout"]
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    @RenderBody()
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white" style="display:none">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Your Website 2021</span>
+                    </div>
+                </div>
+
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    <div class="view_txtR2 rounded" href="#">
+        <p>R2 事業再構築</p>
+    </div>
+
+    <!-- The Modal Login -->
+    @Html.Partial("_LoginPartial", loginViewModel)
+
+    <div id="wapper_alert" style="position: fixed; width: 300px; top: 20px; right: 0;"></div>
+
+    <button id="spinner_refresh" class="btn btn-primary" type="button" disabled="" style="display: none;position: fixed;bottom: 5px;right: 5px;">
+        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>&nbsp;@Localizer["spinner_loading"]
+    </button>
+
+
+
+    <input type="hidden" id="resource_dialog_confirm_title" value="@Localizer["dialog_confirm_title"].Value" />
+    <input type="hidden" id="resource_dialog_confirm_okbtn" value="@Localizer["dialog_confirm_okbtn"].Value" />
+    <input type="hidden" id="resource_dialog_confirm_closebtn" value="@Localizer["dialog_confirm_closebtn"].Value" />
+    <input type="hidden" id="resource_dialog_alert_closebtn" value="@Localizer["dialog_alert_closebtn"].Value" />
+    <input type="hidden" id="resource_dialog_alert_title" value="@Localizer["dialog_alert_title"].Value" />
+    <input type="hidden" id="resource_dialog_confirm_logout" value="@Localizer["dialog_confirm_logout"].Value" />
+    <input type="hidden" id="resource_empty_table" value="@Localizer["empty_table"].Value" />
+    <input id="alert_edit_action_url" type="hidden" value="@Url.Action("Edit", "S03005")" />
+
+    <!--Add script to update the page and send messages.-->
+    <script src="~/lib/signalr/dist/browser/signalr.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            //var notificationHub = $.connection.notificationHub;
+            var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+            // on receive "SendAsync" message from hub
+            //notificationHub.client.SendAsync = function (message) {
+            connection.on("SendAsync", function (user, message) {
+                if (message && message !== '') {
+                    const jsonObj = JSON.parse(message);
+
+                    if (jsonObj && jsonObj.notifications) {
+                        const showCount = 3;
+
+                        // アラートの内容の設定
+                        let alertHtml = '';
+                        let i = 0;
+                        jsonObj.notifications.forEach(s => {
+                            if (i >= showCount) return;
+                            alertHtml += '<a class="dropdown-item d-flex align-items-center" onclick="DirectAlertEdit(\'' + s.Id + '\')">';
+                            alertHtml += '    <div class="mr-3" >';
+                            alertHtml += '        <div class="icon-circle bg-warning">';
+                            alertHtml += '            <i class="fas fa-exclamation-triangle text-white"></i>';
+                            alertHtml += '        </div>';
+                            alertHtml += '    </div >';
+                            alertHtml += '    <div>';
+                            alertHtml += '        <div class="small text-gray-500">' + Func.escape_html(s.CreatedOn) + '</div>';
+                            alertHtml += '        <span class="">' + Func.escape_html(s.Title) + '</span>';
+                            alertHtml += '    </div>';
+                            alertHtml += '</a >';
+                            i++;
+                        });
+
+                        $($('div[aria-labelledby="alertsDropdown"]')[0]).find('.alert-item').html(alertHtml);
+
+                        // アラートの件数の設定
+                        if (jsonObj.notifications.length > showCount) {
+                            $($('#alertsDropdown').find('.badge-counter')[0]).html(showCount + '+');
+                        } else {
+                            if (jsonObj.notifications.length === 0) {
+                                $($('#alertsDropdown').find('.badge-counter')[0]).html('');
+                            } else {
+                                $($('#alertsDropdown').find('.badge-counter')[0]).html(jsonObj.notifications.length);
+                            }
+                        }
+                    }
+                }
+            });
+
+            // on receive "SendOneMsgAsync" message from hub
+            //notificationHub.client.SendOneMsgAsync = function (message) {
+            connection.on("SendOneMsgAsync", function (user, message) {
+                UtilAlert.Show({
+                    type: UtilAlert.TYPE_WARNING,
+                    message: '<strong>@Localizer["notification"]</strong>' + message,
+                });
+            });
+
+            // send message to hub
+            //$.connection.hub.start().done(function () {
+            connection.start().then(function () {
+                //    notificationHub.server.send('1');
+                var user = "Layout";
+                var message = '1';
+                connection.invoke("SendMessage", user, message).catch(function (err) {
+                    return console.error(err.toString());
+                });
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        //タイミング
+        getClock();
+
+        // メニュー
+        SetStateMenu();
+
+
+        // 多言語
+        function ChangeCulture(lang) {
+            console.log("ChangeCulture");
+            $.ajax({
+                url: '/S01001/ChangeLanguage?lang=' + lang,
+                type: 'GET',
+                success: function (res) {
+                    location.reload();
+                }
+            });
+        }
+
+        // ログアウト
+        function Logout() {
+            const confirmLogoutMsg = document.getElementById('resource_dialog_confirm_logout').value;
+            UtilDialog.Confirm({
+                type: UtilDialog.TYPE_PRIMARY,
+                message: confirmLogoutMsg,
+                ok: function () {
+                    // cookie 削除
+                    document.cookie = "@Properties.JWT_TOKEN= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
+
+                    const form = document.createElement('form');
+                    form.action = '@Url.Action("Logout", "S01001")';
+                    form.method = 'post';
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+
+        function DirectAlertEdit(id) {
+            const form = document.createElement('form');
+            form.action = document.getElementById('alert_edit_action_url').value;
+            form.method = 'post';
+            const idEl = document.createElement('input');
+            idEl.setAttribute('type', 'hidden');
+            idEl.setAttribute('name', 'Id');
+            idEl.setAttribute('value', id);
+            form.appendChild(idEl);
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+
+        // -- メニュー---------------------------------------------------------------------------------
+
+        function ToggleFullScreen() {
+            try {
+                if ((document.fullScreenElement !== undefined && document.fullScreenElement === null) || (document.msFullscreenElement !== undefined && document.msFullscreenElement === null) || (document.mozFullScreen !== undefined && !document.mozFullScreen) || (document.webkitIsFullScreen !== undefined && !document.webkitIsFullScreen)) {
+                    const doc = window.document;
+                    const docEl = doc.documentElement;
+                    let requestFullScreen = docEl.requestFullscreen || docEl.mozRequestFullScreen || docEl.webkitRequestFullScreen || docEl.msRequestFullscreen;
+                    requestFullScreen.call(docEl);
+                } else {
+                    const doc = window.document;
+                    const cancelFullScreen = doc.exitFullscreen || doc.mozCancelFullScreen || doc.webkitExitFullscreen || doc.msExitFullscreen;
+                    cancelFullScreen.call(doc);
+                }
+            } catch (e) {
+                //例外エラーが起きた時に実行する処理
+                Func.ErrorHandle(e);
+            }
+        }
+
+        function SetStateMenu() {
+            try {
+                var ArrayCollapse = [];
+        @if (AuthorInfoModelList != null && AuthorInfoModelList.Any())
+        {
+            foreach (var d in AuthorInfoModelList)
+            {
+                @:ArrayCollapse.push("@d.ControllerName");
+            }
+        }
+
+                        var toggledState = localStorage.getItem("menu_toggled_state");
+                var widthSideBar = $("#accordionSidebar").width();
+                if (toggledState && toggledState === '1') {
+                    $('#accordionSidebar').addClass('toggled');
+                    for (let i = 0; i < ArrayCollapse.length; i++) {
+                        $('#' + ArrayCollapse[i]).removeClass('show');
+                    }
+                } else {
+                    var widthWindow = $(window).width();
+                    $('#accordionSidebar').removeClass('toggled');
+                    if (((toggledState && toggledState === '0') && (widthWindow < 768) && widthSideBar == 103)) {
+                        for (let i = 0; i < ArrayCollapse.length; i++) {
+                            $('#' + ArrayCollapse[i]).removeClass('show');
+                        }
+                    } else {
+                        for (let i = 0; i < ArrayCollapse.length; i++) {
+                            if (ArrayCollapse[i] != "S09000") {
+                                $('#' + ArrayCollapse[i]).addClass('show');
+                            }
+                        }
+                    }
+
+                }
+                settingWith();
+            } catch (e) {
+                //例外エラーが起きた時に実行する処理
+                Func.ErrorHandle(e);
+            }
+        }
+
+        function ToggleMenu() {
+            try {
+                var toggledState = localStorage.getItem("menu_toggled_state");
+                if (toggledState && toggledState === '1') {
+                    localStorage.setItem('menu_toggled_state', '0');
+                } else {
+                    localStorage.setItem('menu_toggled_state', '1');
+                }
+                SetStateMenu();
+                ResizeColumn();
+            } catch (e) {
+                //例外エラーが起きた時に実行する処理
+                Func.ErrorHandle(e);
+            }
+        }
+
+        function HideCollapseOther(el) {
+            var ArrayCollapse = [];
+        @if (AuthorInfoModelList != null && AuthorInfoModelList.Any())
+        {
+            foreach (var d in AuthorInfoModelList)
+            {
+                @:ArrayCollapse.push("@d.ControllerName");
+            }
+        }
+                    var toggledState = localStorage.getItem("menu_toggled_state");
+            var widthSideBar = $("#accordionSidebar").width();
+            if ((toggledState && toggledState === '1') || ((toggledState && toggledState === '0') && widthSideBar == 103)) {
+                $(".container-fluid").css({ 'position': '-webkit-sticky' });
+                $(".container-fluid").css({ 'position': 'sticky' });
+                $(".container-fluid").css({ 'z-index': '-1' });
+                for (let i = 0; i < ArrayCollapse.length; i++) {
+                    $('#' + ArrayCollapse[i]).removeClass('show');
+                }
+            }
+            if (el) {
+                let targetId = el.getAttribute('data-target');
+                targetId = targetId.replace('#', '');
+                if (targetId == "S09000") {
+                    if ($("#" + targetId).is('.collapse:not(.show)') == true) {
+                        $(".collapse.main-bg.show").each(function (index, element) {
+                            if (targetId !== $(element).id) {
+                                $(element).collapse('hide');
+                            }
+                        });
+                    } else {
+                        $(".collapse.main-bg").each(function (index, element) {
+                            if (targetId !== $(element).id) {
+                                $(element).collapse('show');
+                            }
+                        });
+                    }
+                } else {
+                    $("#S09000").collapse('hide');
+                }
+            }
+        }
+
+        function settingWith() {
+            let widthSideBar = $('#accordionSidebar').width();
+            $("#content-wrapper").css('margin-left', widthSideBar);
+            $("#HeaderAlways").css('left', widthSideBar);
+        }
+
+        function getClock() {
+            var today = new Date();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            if (h < 10) {
+                h = "0" + h;
+            }
+            if (m < 10) {
+                m = "0" + m;
+            }
+            if (s < 10) {
+                s = "0" + s;
+            }
+
+            $("#digital-clock").text(h + " : " + m + " : " + s);
+            setTimeout(function () { getClock() }, 500);
+        }
+
+        $("#content").on("click", function (index, element) {
+            $(".navbar-nav .collapse").each(function (index, element) {
+                var toggledState = localStorage.getItem("menu_toggled_state");
+                var widthSideBar = $("#accordionSidebar").width();
+                if ((toggledState && toggledState === '1') || ((toggledState && toggledState === '0') && widthSideBar == 103)) {
+                    $(element).collapse('hide');
+                }
+            });
+            $(".container-fluid").css({ 'position': 'static' });
+            $(".container-fluid").css({ 'z-index': '0' });
+        });
+
+        $("#accordionSidebar").on("click", function (index, element) {
+            $(".navbar-nav .collapse").each(function (index, element) {
+                var toggledState = localStorage.getItem("menu_toggled_state");
+                var widthSideBar = $("#accordionSidebar").width();
+                if ((toggledState && toggledState === '1') || ((toggledState && toggledState === '0') && widthSideBar == 103)) {
+                    $(element).collapse('hide');
+                }
+            });
+        });
+
+        window.addEventListener('resize', function (event) {
+            settingWith();
+        }, true);
+
+        document.getElementById("page-top").onscroll = function () {
+            if ($("#accordionSidebar").width() == 0) {
+                settingWith();
+            }
+        };
+
+        $(".datepicker").datepicker({
+            dateFormat: "yy/mm/dd",
+            changemonth: true,
+            changeyear: true
+        });
+
+    </script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

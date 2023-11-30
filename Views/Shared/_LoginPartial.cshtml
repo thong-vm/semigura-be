@@ -1,0 +1,152 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
+@model semigura.Models.S01001ViewModel
+
+<!-- The Modal Login -->
+@using (Html.BeginForm("Login", "S01001", new { ReturnUrl = ViewBag.ReturnUrl}, FormMethod.Post, true, new { id = "login-form" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="modal" id="login_modal">
+        <div class="modal-dialog">
+            <div class="modal-content" style="margin-top: 100px; border: 1px solid white; background-size: cover; background-position: left; background-image: url('https://images.unsplash.com/photo-1472152083436-a6eede6efad9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=1169&amp;q=80'); ">
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+                    <div class="text-center">
+                        <h1 class="h2 text-white">@Localizer["login"]</h1>
+                    </div>
+                    <div class="text-danger login-validation-summary-errors" data-valmsg-summary="true">
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-text " id="basic-addon1" style="border-radius: 0.35rem 0 0 0.35rem; background-color: transparent; color: white; ">
+                                <i class="bi bi-person"></i>
+                            </span>
+                            @Html.TextBoxFor(model => model.Username, new { @class = "form-control form-control-user text-white bg-transparent", @placeholder = Localizer["username"].Value })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="input-group ">
+                            <span class="input-group-text" id="basic-addon1" style="border-radius: 0.35rem 0 0 0.35rem; background-color: transparent; color: white; ">
+                                <i class="bi bi-key"></i>
+                            </span>
+                            @Html.PasswordFor(model => model.Password, new { @class = "form-control form-control-user text-white bg-transparent", @placeholder = Localizer["password"].Value })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+
+                    <div class="text-center">
+                        <button type="button" class="btn btn-primary" onclick="Login()">
+                            <span id="spinner-login-wapper">
+                                <i class="bi bi-check-circle"></i>
+                            </span>
+                            <span class="text">@Localizer["login"]</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(model => model.OldUsername);
+}
+
+<script type="text/javascript">
+    function Login() {
+        console.log('loginPartial')
+        // エラーメッセージをクリア
+        ClearErrorMessageLoginForm();
+
+        let username = $('#login-form > #Username').val();
+        let oldUsername = $('#login-form > #OldUsername').val();
+
+        $("#login-form").validate();
+        if ($("#login-form").valid()) {
+            const dataType = 'application/x-www-form-urlencoded; charset=utf-8';
+            let data = Func.GetValueFormForPost('login-form');
+            data = data + '&LoginByAjax=true';
+
+            ShowSpinnerLogin();
+            Func.ajax({
+                type: 'POST',
+                url: '/S01001/Login',
+                data: data,
+                async: true,
+                cache: false,
+                processData: false,
+                contentType: dataType,
+                success: function (res) {
+                    if (res.status) {
+                        let username = document.getElementById('Username').value;
+                        let oldUsername = document.getElementById('OldUsername').value;
+
+                        if (oldUsername !== username) {
+                            location.href = "@Url.Action("Index", "S01002")";
+                        }
+
+                        $('#login_modal').modal('hide');
+                    } else {
+                        ShowErrorMessageLoginForm(res.message);
+                    }
+                },
+                error: function (res) {
+                    ShowErrorMessageLoginForm(res);
+                },
+                complete: function () {
+                    HideSpinnerLogin();
+                }
+            }, true);
+        }
+    }
+
+    function ShowErrorMessageLoginForm(message) {
+        try {
+            let item = document.getElementsByClassName('login-validation-summary-errors');
+            if (item && item.length > 0 && message) {
+                const ulEl = document.createElement('ul');
+                const liEl = document.createElement('li');
+                liEl.innerHTML = message;
+                ulEl.append(liEl);
+                item[0].innerHTML = '';
+                item[0].append(ulEl);
+            }
+        } catch (e) {
+            //例外エラーが起きた時に実行する処理
+            Func.ErrorHandle(e);
+        }
+    }
+
+    function ClearErrorMessageLoginForm() {
+        try {
+            let item = document.getElementsByClassName('login-validation-summary-errors');
+            if (item && item.length > 0) {
+                const ulEl = document.createElement('ul');
+                item[0].innerHTML = '';
+                item[0].append(ulEl);
+            }
+        } catch (e) {
+            //例外エラーが起きた時に実行する処理
+            Func.ErrorHandle(e);
+        }
+    }
+
+    function ShowSpinnerLogin() {
+        const spinnerLogin = document.getElementById('spinner-login-wapper');
+        spinnerLogin.innerHTML = '<div class="spinner-border" style="width:1.2em; height: 1.2em"><span class="sr-only"></span></div>';
+    }
+
+    function HideSpinnerLogin() {
+        const spinnerLogin = document.getElementById('spinner-login-wapper');
+        spinnerLogin.innerHTML = '<i class="bi bi-check-circle"></i>';
+    }
+
+</script>
